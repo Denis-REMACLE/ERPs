@@ -1,2 +1,2 @@
 # ERPs
-ERPs is a simple ERP solution we made @ESGI
+ERPS is an ERgonmical PokedecS we made @ESGI
