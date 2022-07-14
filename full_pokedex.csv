@@ -1,3 +1,11 @@
-0;10;Bulbizarre;Le Pokémon Graine. Pour devenir grand, un jeune Bulbizarre utilise les nutriments contenus dans sa graine.
-1;10;Salamèche;Le Pokémon Lézard. Quand la pointe de la queue de Salamèche brûle avec ardeur, c'est qu'il est en bonne santé.
-2;10;Carapuce;Le Pokémon Minitortue. Au cours des combats, Carapuce se cache dans sa carapace et dès qu'il en a l'occasion, il asperge d'eau son adversaire.
+0;10;0;Bulbizarre;Le Pokémon Graine. Pour devenir grand, un jeune Bulbizarre utilise les nutriments contenus dans sa graine.
+1;10;0;Salamèche;Le Pokémon Lézard. Quand la pointe de la queue de Salamèche brûle avec ardeur, c'est qu'il est en bonne santé.
+2;10;0;Carapuce;Le Pokémon Minitortue. Au cours des combats, Carapuce se cache dans sa carapace et dès qu'il en a l'occasion, il asperge d'eau son adversaire.
+3;1;0;Chenipan;Le Pokémon Ver. Chenipan peut escalader les parois verticales pour trouver sa nourriture grâce aux ventouses sur ses pattes.
+4;1;0;Keunotor;Le Pokémon Souridodue. C'est un petit rongeur qui adore grimper aux arbres mais qui vit au bord des rivières.
+5;2;0;Nidoran;Le Pokémon Vénépic. Il est de type Poison. Le mâle Nidoran commence par évoluer en Nidorino, ensuite en Nidoking.
+6;2;0;Caninos;Le Pokémon Chiot. Caninos est d'une grande loyauté et il ne bouge pas tant que son Dresseur ne lui en donne pas l'ordre.
+7;3;0;Pikachu;Le Pokémon Souris. Pikachu peut lancer des décharges électriques grâce aux générateurs situés dans ses joues.
+8;3;0;Minidraco;Le Pokémon Dragon. Minidraco change de peau car il grandit. Ce processus s'accomplit souvent alors qu'il se cache derrière de puissantes chutes d'eau.
+9;4;0;Canarticho;Le Pokémon Canard Sauvage. Ce Pokémon extrêmement rare tient toujours un poireau avec lequel il construit son nid.
+10;5;0;MewTwo;Pokémon inconnu. Information indisponible.
