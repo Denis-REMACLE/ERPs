@@ -29,6 +29,7 @@ void settings(pokemon_t*, pokemon_t*);
 void quit(pokemon_t*, pokemon_t*);
 void play_game(pokemon_t*, pokemon_t*);
 void new_pokedex(pokemon_t*);
+void menu_start(pokemon_t*);
 int insert_node_from_fullpokedex(pokemon_t*, pokemon_t*, int, int);
 void open_pokedex(pokemon_t*);
 void create_pokemon(pokemon_t*);

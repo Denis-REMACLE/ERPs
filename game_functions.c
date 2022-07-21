@@ -87,6 +87,7 @@ void save_pokedex(pokemon_t* fullpokedex, pokemon_t* userpokedex){
         userpokedex = userpokedex->prev;
     }
     fclose(filePointer);
+    play_game(fullpokedex, userpokedex);
 }
 
 
@@ -109,6 +110,7 @@ void read_pokedex(pokemon_t* fullpokedex, pokemon_t* userpokedex){
     }
 
     printf("\n");
+    play_game(fullpokedex, userpokedex);
 }
 
 void search_pokemon(pokemon_t* fullpokedex, pokemon_t* userpokedex){
@@ -117,8 +119,6 @@ void search_pokemon(pokemon_t* fullpokedex, pokemon_t* userpokedex){
     int is_known = 0;
     int rarity_to_use, i = 0, option, luck;
     int poke[10];
-
-    printf("%d\n", num);
 
     if ( num >= 0 && num <= 50 ){
         rarity_to_use = 1;
@@ -151,13 +151,11 @@ void search_pokemon(pokemon_t* fullpokedex, pokemon_t* userpokedex){
         fullpokedex = fullpokedex->next;
     }
     while (fullpokedex != NULL){
-        printf("%s\n",fullpokedex->name);
         if (fullpokedex->prev == NULL){
                 break;
             }
         fullpokedex = fullpokedex->prev;
     }
-    puts("pong");
 
     num = rand() % i;
     while (fullpokedex != NULL){
@@ -229,10 +227,11 @@ void search_pokemon(pokemon_t* fullpokedex, pokemon_t* userpokedex){
             userpokedex = userpokedex->prev;
         }
     }
+    play_game(fullpokedex, userpokedex);
 }
 
 void organise_pokedex(pokemon_t* userpokedex){
-    puts("coucou");
+    printf("[%d] :\t%s : Captured %dx\n", userpokedex->number, userpokedex->name, userpokedex->owned);
 }
 
 void settings(pokemon_t* fullpokedex, pokemon_t* userpokedex){
@@ -247,6 +246,7 @@ void settings(pokemon_t* fullpokedex, pokemon_t* userpokedex){
     CLASSIFICATION = option;
 
     organise_pokedex(userpokedex);
+    play_game(fullpokedex, userpokedex);
 }
 
 void quit(pokemon_t* fullpokedex, pokemon_t* userpokedex){
@@ -258,31 +258,28 @@ void play_game(pokemon_t* fullpokedex, pokemon_t* userpokedex){
     void (*array_fptr[5])(pokemon_t* fullpokedex, pokemon_t* userpokedex);
     int option;
 
-    while (1 == 1){
+    puts("[0] :\tRead pokedex");
+    puts("[1] :\tSearch for pokemons");
+    puts("[2] :\tSettings");
+    puts("[3] :\tSave");
+    puts("[4] :\tExit");
 
-        puts("[0] :\tRead pokedex");
-        puts("[1] :\tSearch for pokemons");
-        puts("[2] :\tSettings");
-        puts("[3] :\tSave");
-        puts("[4] :\tExit");
-
-        while (1==1){
-            printf("\nPlease make your choice : ");
-            scanf("%d",&option);
-            if (option >= 0 && option <= 4) {
-                break;
-            }
+    while (1==1){
+        printf("\nPlease make your choice : ");
+        scanf("%d",&option);
+        if (option >= 0 && option <= 4) {
+            break;
         }
-        system("clear");
-
-        array_fptr[0] = &read_pokedex;
-        array_fptr[1] = &search_pokemon;
-        array_fptr[2] = &settings;
-        array_fptr[3] = &save_pokedex;
-        array_fptr[4] = &quit;
-
-        array_fptr[option](fullpokedex, userpokedex);
     }
+    system("clear");
+
+    array_fptr[0] = &read_pokedex;
+    array_fptr[1] = &search_pokemon;
+    array_fptr[2] = &settings;
+    array_fptr[3] = &save_pokedex;
+    array_fptr[4] = &quit;
+
+    array_fptr[option](fullpokedex, userpokedex);
 }
 
 void new_pokedex(pokemon_t* fullpokedex){
@@ -438,7 +435,8 @@ void open_pokedex(pokemon_t* fullpokedex){
     regex_t regex;
     int i, option, reg;
     struct dirent *entry;
-    regcomp(&regex, "[:word:].csv", 0);
+    printf("[%d] :\t%s : Captured %dx\n", fullpokedex->number, fullpokedex->name, fullpokedex->owned);
+    regcomp(&regex, "[A-Za-z]+.csv", 0);
 
     folder = opendir(".");
     while( (entry=readdir(folder)) )

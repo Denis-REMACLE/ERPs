@@ -1,10 +1,12 @@
 #include "pokeheader.h"
 
+pokemon_t *fullpokedex;
+
 void signal_handler(int sig){
     signal(sig, SIG_IGN);
-    signal(SIGUSR1, signal_handler);
+    signal(SIGINT, signal_handler);
 
-    raise(SIGUSR1);
+    raise(SIGINT);
     exit(0);
 }
 
@@ -34,8 +36,8 @@ void menu_start(pokemon_t* fullpokedex){
 }
 
 int main(void){
-    signal(SIGUSR1, signal_handler);
-    pokemon_t *fullpokedex = load_fullpokedex();
+    signal(SIGINT, signal_handler);
+    fullpokedex = load_fullpokedex();
     menu_start(fullpokedex);
     exit(0);
 }
