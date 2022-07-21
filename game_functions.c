@@ -1,7 +1,15 @@
 #include "pokeheader.h"
 
 int CLASSIFICATION = 0;// 0 = by number in the pokedex, 1 = by alphabetical order
-char SAVE[25];
+
+char* strdup(char* input) {
+    // We need strlen(src) + 1, since we have to account for '\0'
+    int len = strlen(input) + 1;
+    char* output = (char*) malloc ((len + 1) * sizeof(char));
+    if (output == NULL) return NULL;
+    output = (char*) memcpy(output, input, len);
+    return output;
+}
 
 const char* getfield(char* line, int num)
 {
@@ -18,16 +26,15 @@ const char* getfield(char* line, int num)
 
 int insert_node_from_csv(pokemon_t* linked_list, char* line){
     pokemon_t *new_pokemon = malloc(sizeof(pokemon_t)), *tmp_list = linked_list;
-    char* tmp = strdup(line);
-
+	char* tmp=strdup(line);
     new_pokemon->number = atoi(getfield(tmp, 1));
-    tmp = strdup(line);
+    tmp=strdup(line);
     new_pokemon->rarity = atoi(getfield(tmp, 2));
-    tmp = strdup(line);
+    tmp=strdup(line);
     new_pokemon->owned = atoi(getfield(tmp, 3));
-    tmp = strdup(line);
+    tmp=strdup(line);
     new_pokemon->name = getfield(tmp, 4);
-    tmp = strdup(line);
+    tmp=strdup(line);
     new_pokemon->description = getfield(tmp, 5);
     new_pokemon->next = NULL;
     while (tmp_list != NULL){
@@ -48,16 +55,16 @@ pokemon_t *load_fullpokedex(void){
     char line[4096];
     while (fgets(line, 4096, stream))
 	{
-		char* tmp = strdup(line);
+		char* tmp=strdup(line);
         if (atoi(getfield(tmp, 1)) == 0){
             first_entry.number = atoi(getfield(tmp, 1));
-            tmp = strdup(line);
+            tmp=strdup(line);
 		    first_entry.rarity = atoi(getfield(tmp, 2));
-            tmp = strdup(line);
+            tmp=strdup(line);
 		    first_entry.owned = atoi(getfield(tmp, 3));
-            tmp = strdup(line);
+            tmp=strdup(line);
 		    first_entry.name = getfield(tmp, 4);
-            tmp = strdup(line);
+            tmp=strdup(line);
 		    first_entry.description = getfield(tmp, 5);
             first_entry.next = NULL;
             first_entry.prev = NULL;
@@ -69,27 +76,6 @@ pokemon_t *load_fullpokedex(void){
 	}
     return fullpokedex;
 }
-
-void save_pokedex(pokemon_t* fullpokedex, pokemon_t* userpokedex){
-    FILE *filePointer;
-    filePointer = fopen(SAVE, "w+");
-    while (userpokedex != NULL){
-        fprintf(filePointer, "%d;%d;%d;%s;%s\n", userpokedex->number, userpokedex->rarity, userpokedex->owned, userpokedex->name, userpokedex->description);
-        if (userpokedex->next == NULL){
-            break;
-        }
-        userpokedex = userpokedex->next;
-    }
-    while (userpokedex != NULL){
-        if (userpokedex->prev == NULL){
-                break;
-            }
-        userpokedex = userpokedex->prev;
-    }
-    fclose(filePointer);
-    play_game(fullpokedex, userpokedex);
-}
-
 
 void read_pokedex(pokemon_t* fullpokedex, pokemon_t* userpokedex){
     while (userpokedex != NULL){
@@ -250,7 +236,39 @@ void settings(pokemon_t* fullpokedex, pokemon_t* userpokedex){
 }
 
 void quit(pokemon_t* fullpokedex, pokemon_t* userpokedex){
-    save_pokedex(fullpokedex, userpokedex);
+    int pokemonsvus = 0, pokemonsrate = 0;
+
+
+    while (userpokedex != NULL){
+        if (userpokedex->next == NULL){
+                break;
+            }
+        pokemonsvus++;
+        userpokedex = userpokedex->next;
+    }
+    while (userpokedex != NULL){
+        if (userpokedex->prev == NULL){
+                break;
+            }
+        userpokedex = userpokedex->prev;
+    }
+    printf("You have seen %d pokemons.\n", pokemonsvus);
+
+    while (fullpokedex != NULL){
+        pokemonsrate++;
+        if (fullpokedex->next == NULL){
+                break;
+            }
+        fullpokedex = fullpokedex->next;
+    }
+    while (fullpokedex != NULL){
+        if (fullpokedex->prev == NULL){
+                break;
+            }
+        fullpokedex = fullpokedex->prev;
+    }
+    printf("You have missed %d.\n", pokemonsrate-pokemonsvus);
+    puts("Good luck next time.");
     exit(0);
 }
 
@@ -261,7 +279,7 @@ void play_game(pokemon_t* fullpokedex, pokemon_t* userpokedex){
     puts("[0] :\tRead pokedex");
     puts("[1] :\tSearch for pokemons");
     puts("[2] :\tSettings");
-    puts("[3] :\tSave");
+    puts("[3] :\tSave and exit");
     puts("[4] :\tExit");
 
     while (1==1){
@@ -281,103 +299,6 @@ void play_game(pokemon_t* fullpokedex, pokemon_t* userpokedex){
 
     array_fptr[option](fullpokedex, userpokedex);
 }
-
-void new_pokedex(pokemon_t* fullpokedex){
-    int option;
-    pokemon_t first_entry;
-    pokemon_t *userpokedex;
-    printf("Please name your savefile : ");
-    scanf("%s", SAVE);
-    strcat(SAVE, ".csv");
-    system("clear");
-    puts("Professeur Chen : Vous êtes un jeune adulte désormais !");
-    puts("Professeur Chen : Vous allez donc partir à l'aventure !");
-    puts("Professeur Chen : Je vais donc vous offrir votre premier pokémon !");
-
-    puts("Professeur Chen : Vous devez choisir entre : ");
-    while (fullpokedex != NULL){
-        if (fullpokedex->rarity == 10){
-        printf("[%d] :\t%s\n", fullpokedex->number, fullpokedex->name);
-        printf("%s\n", fullpokedex->description);
-        }
-        if (fullpokedex->next == NULL){
-                break;
-            }
-        fullpokedex = fullpokedex->next;
-    }
-    while (1==1){
-        printf("\nWhich one do you choose : ");
-        scanf("%d",&option);
-        if (option >= 0 && option <= 2) {
-            break;
-        }
-    }
-    system("clear");
-
-    while (fullpokedex != NULL){
-        if (fullpokedex->prev == NULL){
-                break;
-            }
-        fullpokedex = fullpokedex->prev;
-    }
-
-    while (fullpokedex != NULL){
-        if (fullpokedex->number == 0){
-            first_entry.number = fullpokedex->number;
-            first_entry.rarity = fullpokedex->rarity;
-            if (option == 0){
-                first_entry.owned = 1;
-            }
-            else {
-                first_entry.owned = 0;
-            }
-            first_entry.name = fullpokedex->name;
-            first_entry.description = fullpokedex->description;
-            first_entry.next = NULL;
-            first_entry.prev = NULL;
-            userpokedex = &first_entry;
-            break;
-        }
-        if (fullpokedex->next == NULL){
-                break;
-            }
-        fullpokedex = fullpokedex->next;
-    }
-
-    while (fullpokedex != NULL){
-        if (fullpokedex->prev == NULL){
-                break;
-            }
-        fullpokedex = fullpokedex->prev;
-    }
-
-while (fullpokedex != NULL){
-        if (fullpokedex->rarity == 10 && fullpokedex->number != 0){
-            if (option == fullpokedex->number){
-                insert_node_from_fullpokedex(userpokedex, fullpokedex, fullpokedex->number, 1);
-            }
-            else {
-                insert_node_from_fullpokedex(userpokedex, fullpokedex, fullpokedex->number, 0);
-            }
-        }
-        if (fullpokedex->next == NULL){
-                break;
-            }
-        fullpokedex = fullpokedex->next;
-    }
-
-    while (fullpokedex != NULL){
-        if (fullpokedex->prev == NULL){
-                break;
-            }
-        fullpokedex = fullpokedex->prev;
-    }
-
-    system("clear");
-    play_game(fullpokedex, userpokedex);
-}
-
-
 
 int insert_node_from_fullpokedex(pokemon_t* linked_list, pokemon_t* fullpokedex, int number, int owned){
     pokemon_t *new_pokemon = malloc(sizeof(pokemon_t)), *tmp_list = linked_list;
@@ -427,36 +348,4 @@ int insert_node_from_fullpokedex(pokemon_t* linked_list, pokemon_t* fullpokedex,
         tmp_list = tmp_list->next;
     }
     return 1;
-}
-
-
-void open_pokedex(pokemon_t* fullpokedex){
-    DIR *folder;
-    regex_t regex;
-    int i, option, reg;
-    struct dirent *entry;
-    printf("[%d] :\t%s : Captured %dx\n", fullpokedex->number, fullpokedex->name, fullpokedex->owned);
-    regcomp(&regex, "[A-Za-z]+.csv", 0);
-
-    folder = opendir(".");
-    while( (entry=readdir(folder)) )
-    {
-        reg = regexec(&regex, entry->d_name, 0, NULL, 0);
-        if (reg == 0){
-            printf("[%d]: %s\n", i++,entry->d_name);
-        }
-        else if (reg == REG_NOMATCH) {
-            printf("Pattern not found.\n");
-        }
-    }
-
-    while (1==1){
-        printf("\nPlease make your choice : ");
-        scanf("%d",&option);
-        if (option >= 0 && option <= i) {
-            break;
-        }
-    }
-    system("clear");
-    closedir(folder);
 }

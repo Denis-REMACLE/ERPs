@@ -140,7 +140,12 @@ void delete_pokemon(pokemon_t* fullpokedex){
             fullpokedex->next = pokemon_to_delete->next;
         }
         else if (fullpokedex == pokemon_to_delete->next){
-            fullpokedex->prev = pokemon_to_delete->prev;
+            if (option == 0){
+                fullpokedex->prev = NULL;
+            }
+            else{
+                fullpokedex->prev = pokemon_to_delete->prev;
+            }
         }
         if (fullpokedex->number > option){
             fullpokedex->number--;
@@ -180,7 +185,7 @@ void save_pokemon(pokemon_t* fullpokedex){
 }
 
 void quit_pokemon(pokemon_t* fullpokedex){
-    printf("[%d] :\t%s\n", fullpokedex->number, fullpokedex->name);
+    save_pokemon(fullpokedex);
     exit(0);
 }
 
